@@ -3,13 +3,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 import { useState } from "react";
 
-import { getGroqChatCompletion, getGroqChatCompletionTextWrapper } from "@/lib/groq/groq"
+import { getGroqChatCompletion } from "@/lib/groq/groq"
 import { getGroqChatCompletionStreamWrapper } from "@/lib/groq/stream"
-import { getGroqChatCompletionWithTools } from "@/lib/groq/tool"
 import { useChatMessages } from "@/hook/useChatHistory";
 import { Chat, ChatContainer } from "@/components/chat";
 
-export default function() {
+export default function ChatSimplePage() {
     
     const [response, setResponse] = useState("どうしたの?")
     const { push } = useChatMessages([

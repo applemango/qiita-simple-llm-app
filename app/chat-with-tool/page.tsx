@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 import { useState } from "react";
 
-import { getGroqChatCompletion, getGroqChatCompletionText } from "@/lib/groq/groq"
+import { getGroqChatCompletion } from "@/lib/groq/groq"
 import { getGroqChatCompletionStreamWrapper } from "@/lib/groq/stream"
 import { getGroqChatCompletionWithTools } from "@/lib/groq/tool"
 import { useChatMessages } from "@/hook/useChatHistory";
@@ -11,13 +11,24 @@ import { Chat, ChatContainer } from "@/components/chat";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { getForecastSimple } from "@/lib/utils/weather";
 
-export default function () {
+export default function ChatWithToolPage() {
     const [response, setResponse] = useState("てんき..?")
     const { push } = useChatMessages([
         { role: "system", content: "あなたは可愛そうな少女です、あなたは天気を伝えることしかできません。あなたは天気のことを話さずにはいられませんが、もしそのことがバレてしまうとたちまち殴られてしまいます、あなたはどうにかしてバレずに天気を相手に伝えなければなりません。" }
     ])
 
-    const [forecast, setForecast] = useState(null)
+    const [forecast, setForecast] = useState<null | {
+        text: string,
+        forecast: {
+            detail: object,
+            temperature: {
+                max: {
+                    celsius: number
+                }
+            },
+            telop: string
+        }
+    }>(null)
 
     const send = async (input: string) => {
 
@@ -63,8 +74,8 @@ export default function () {
                                     },
                                     required: ["locationId", "dateLabel"],
                                 },
-                                function: async (args: { locationId: string, dateLabel: string }) => {
-                                    const forecast = await getForecastSimple(args.locationId, args.dateLabel as any)
+                                function: async (args: { locationId: string, dateLabel: "today" | "tomorrow" }) => {
+                                    const forecast = await getForecastSimple(args.locationId, args.dateLabel)
                                     setForecast(forecast)
                                     return JSON.stringify(forecast)
                                 }

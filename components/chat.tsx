@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
-import { Info } from "lucide-react"
 
 export const ChatContainer = ({ children }: {
     children: React.ReactNode
